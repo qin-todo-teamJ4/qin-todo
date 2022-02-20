@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  return <div>Hello Qin Todo</div>;
+  return <div className="text-3xl font-bold underline">Hello Qin Todo</div>;
 };
 
 export default Home;

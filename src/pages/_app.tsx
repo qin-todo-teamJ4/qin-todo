@@ -1,7 +1,7 @@
+import "tailwindcss/tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Layout } from "../layouts";
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
