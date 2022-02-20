@@ -1,8 +1,11 @@
 import "tailwindcss/tailwind.css";
+
 import type { AppProps } from "next/app";
 import Head from "next/head";
+
 import { Layout } from "../layouts";
-function MyApp({ Component, pageProps }: AppProps) {
+
+const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
@@ -15,6 +18,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Layout>
     </>
   );
-}
+};
 
 export default MyApp;
