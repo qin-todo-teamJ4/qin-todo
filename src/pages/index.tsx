@@ -1,7 +1,13 @@
 import type { NextPage } from "next";
 
+import { Header } from "../components/Layouts/Header";
+
 const Home: NextPage = () => {
-  return <div className="text-3xl font-bold underline">Hello Qin Todo</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 export default Home;
