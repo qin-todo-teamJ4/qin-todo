@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["tailwindcss"]
+  "cSpell.words": ["semibold", "tailwindcss"],
+  "prettier.printWidth": 120
 }
