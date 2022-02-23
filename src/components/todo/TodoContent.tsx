@@ -1,4 +1,6 @@
 import type { VFC } from "react";
+import { FiTrash2 } from "react-icons/fi";
+import { HiOutlineDuplicate } from "react-icons/hi";
 
 type Todo = { id: number; todo: string; completed: boolean };
 
@@ -18,7 +20,14 @@ export const TodoContent: VFC<Props> = (props) => {
           checkTodo(todo.id);
         }}
       />
-      <p className={todo.completed ? "line-through " : ""}>{todo.todo}</p>
+      <p
+        className={todo.completed ? "line-through " : ""}
+        style={{ minWidth: 120 }}
+      >
+        {todo.todo}
+      </p>
+      <HiOutlineDuplicate className="text-2xl ml-12" />
+      <FiTrash2 className="text-2xl ml-2" />
     </li>
   );
 };
