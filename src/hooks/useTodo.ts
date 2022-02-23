@@ -1,9 +1,23 @@
 import { useCallback, useState } from "react";
 
+export type UseTodoReturnType = {
+  state: State;
+  addTask: VoidFunction;
+  cancelInput: VoidFunction;
+  inputTodo: (value: string) => void;
+  checkTodo: (id: number) => void;
+  registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+};
+
 type Todo = { id: number; todo: string; completed: boolean };
-export const useTodo = () => {
-  const [state, setState] = useState({
-    todoList: [] as Todo[],
+type State = {
+  todoList: Todo[];
+  isCreate: boolean;
+  value: string;
+};
+export const useTodo = (): UseTodoReturnType => {
+  const [state, setState] = useState<State>({
+    todoList: [],
     isCreate: false,
     value: "",
   });
