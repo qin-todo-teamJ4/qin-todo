@@ -16,7 +16,7 @@ export const TodoList: VFC<Props> = (props) => {
     useTodo();
 
   return (
-    <div className="ml-5">
+    <div className="ml-5 w-64">
       <h2 className={`${mainColor} mb-2 text-2xl font-semibold`}>{title}</h2>
       {state.isCreate ? (
         <TodoForm
