@@ -25,7 +25,21 @@ describe("useTodoのテスト", () => {
     act(() => {
       result.current.addTask();
     });
-
     expect(result.current.state.isCreate).toBeTruthy();
+  });
+
+  it("cancelInput関数でisCreateがfalseになること", () => {
+    result.current.state.isCreate = true;
+    act(() => {
+      result.current.cancelInput();
+    });
+    expect(result.current.state.isCreate).toBeFalsy();
+  });
+
+  it("inputTodo関数でstate.valueが更新されること", () => {
+    act(() => {
+      result.current.inputTodo("test");
+    });
+    expect(result.current.state.value).toBe("test");
   });
 });
