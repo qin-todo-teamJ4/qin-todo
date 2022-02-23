@@ -1,5 +1,4 @@
 import type { VFC } from "react";
-import { IconContext } from "react-icons";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 type Props = {
@@ -13,9 +12,7 @@ export const AddTodoButton: VFC<Props> = (props) => {
       onClick={addTask}
       className="flex text-base cursor-pointer text-gray-400 mt-2"
     >
-      <IconContext.Provider value={{ size: "24px" }}>
-        <AiFillPlusCircle />
-      </IconContext.Provider>
+      <AiFillPlusCircle className="text-2xl" />
       <p className="ml-2">タスクを追加する</p>
     </div>
   );
