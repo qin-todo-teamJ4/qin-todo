@@ -9,6 +9,7 @@
 - [Mock Service Worker](https://mswjs.io/)
 - [Vitest](https://vitest.dev/)
 - [SWR](https://swr.vercel.app/ja)
+- [Recoil](https://recoiljs.org/)
 - 認証：[Firebase](https://firebase.google.com/) + [NextAuth.js](https://next-auth.js.org/)
 - 本番環境：[Firebase Hosting](https://firebase.google.com/docs/hosting?hl=ja)
 
