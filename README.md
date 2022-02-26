@@ -14,6 +14,7 @@
 - 本番環境：[Firebase Hosting](https://firebase.google.com/docs/hosting?hl=ja)
 
 ## Design
+
 - [Figma](https://www.figma.com/file/SNPCXNu0V6k6wHS4piYyS2/Qin-Todo?node-id=0%3A1)
 
 ## Develop
@@ -23,6 +24,7 @@
 ```bash
 yarn dev // localhost:3000 で起動
 ```
+
 本番の動作確認を行う場合
 
 ```bash
@@ -49,7 +51,7 @@ yarn start // localhost:3000 で起動。dev中はportを変える必要があ�
 `feature/あなたのGitHub名-*`
 
 - 開発にはここを用いる。
-- 必ず developを最新にしてからから分岐し、PRを作成後develop にマージする。
+- 必ず develop を最新にしてからから分岐し、PR を作成後 develop にマージする。
 - `*` は開発する対象の ISSUE の番号を記入。
 - 例: feature/openfruits-#1
 
