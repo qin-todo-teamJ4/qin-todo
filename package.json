@@ -9,7 +9,7 @@
     "lint": "next lint",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
