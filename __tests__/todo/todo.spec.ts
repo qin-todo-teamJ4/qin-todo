@@ -14,25 +14,25 @@ beforeEach(() => {
 });
 
 describe("useTodoのテスト", () => {
-  it("stateの初期値がvalue:'',isCreate:false,todoList:[]になっていること", () => {
+  it("stateの初期値がvalue:'',isTyping:false,todoList:[]になっていること", () => {
     expect(result.current.state.value).toBe("");
-    expect(result.current.state.isCreate).toBe(false);
+    expect(result.current.state.isTyping).toBe(false);
     expect(result.current.state.todoList.length).toBe(0);
   });
 
-  it("addTask関数でisCreateがtrueになること", () => {
+  it("addTask関数でisTypingがtrueになること", () => {
     act(() => {
       result.current.addTask();
     });
-    expect(result.current.state.isCreate).toBeTruthy();
+    expect(result.current.state.isTyping).toBeTruthy();
   });
 
-  it("cancelInput関数でisCreateがfalseになること", () => {
-    result.current.state.isCreate = true;
+  it("cancelInput関数でisTypingがfalseになること", () => {
+    result.current.state.isTyping = true;
     act(() => {
       result.current.cancelInput();
     });
-    expect(result.current.state.isCreate).toBeFalsy();
+    expect(result.current.state.isTyping).toBeFalsy();
   });
 
   it("inputTodo関数でstate.valueが更新されること", () => {

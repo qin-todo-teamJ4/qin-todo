@@ -12,22 +12,22 @@ export type UseTodoReturnType = {
 type Todo = { id: number; todo: string; completed: boolean };
 type State = {
   todoList: Todo[];
-  isCreate: boolean;
+  isTyping: boolean;
   value: string;
 };
 export const useTodo = (): UseTodoReturnType => {
   const [state, setState] = useState<State>({
     todoList: [],
-    isCreate: false,
+    isTyping: false,
     value: "",
   });
 
   const addTask = useCallback(() => {
-    setState({ ...state, isCreate: true });
+    setState({ ...state, isTyping: true });
   }, [state]);
 
   const cancelInput = useCallback(() => {
-    setState({ ...state, isCreate: false });
+    setState({ ...state, isTyping: false });
   }, [state]);
 
   const inputTodo = useCallback(
