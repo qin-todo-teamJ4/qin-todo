@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "firebase deploy --only hosting",
     "lint": "next lint",
+    "export": "next export",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "test": "vitest --run"
