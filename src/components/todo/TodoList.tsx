@@ -15,15 +15,22 @@ type Props = {
 
 export const TodoList: VFC<Props> = (props) => {
   const { whenTodo, mainColor } = props;
-  const { state, registerTodo, inputTodo, cancelInput, checkTodo, addTask } =
-    useTodo(props.whenTodo);
+  const {
+    todoListState,
+    inputState,
+    registerTodo,
+    inputTodo,
+    cancelInput,
+    checkTodo,
+    addTask,
+  } = useTodo(props.whenTodo);
 
   return (
     <div className="ml-5 w-64">
       <h2 className={`${mainColor} mb-2 text-2xl font-semibold`}>{whenTodo}</h2>
-      {state.isTyping ? (
+      {inputState.isTyping ? (
         <TodoForm
-          value={state.value}
+          value={inputState.value}
           registerTodo={registerTodo}
           inputTodo={inputTodo}
           cancelInput={cancelInput}
@@ -32,7 +39,7 @@ export const TodoList: VFC<Props> = (props) => {
         <div className="h-10 invisible">invisible</div>
       )}
       <ul>
-        {state.todoList.map((todo) => {
+        {todoListState?.map((todo) => {
           return (
             <TodoContent key={todo.id} todo={todo} checkTodo={checkTodo} />
           );
