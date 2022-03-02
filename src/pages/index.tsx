@@ -8,9 +8,9 @@ const Home: NextPage = () => {
     <>
       <Header />
       <div className="flex justify-around mt-8">
-        <TodoList title="今日する" mainColor="text-rose-500" />
-        <TodoList title="明日する" mainColor="text-orange-500" />
-        <TodoList title="今度する" mainColor="text-yellow-400" />
+        <TodoList whenTodo="今日する" mainColor="text-rose-500" />
+        <TodoList whenTodo="明日する" mainColor="text-orange-500" />
+        <TodoList whenTodo="今度する" mainColor="text-yellow-400" />
       </div>
     </>
   );

@@ -9,13 +9,19 @@ export type UseTodoReturnType = {
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-type Todo = { id: number; todo: string; completed: boolean };
+type Todo = {
+  id: number;
+  todo: string;
+  completed: boolean;
+  whenTodo: WhenTodo;
+};
+type WhenTodo = "今日する" | "明日する" | "今度する";
 type State = {
   todoList: Todo[];
   isTyping: boolean;
   value: string;
 };
-export const useTodo = (): UseTodoReturnType => {
+export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
   const [state, setState] = useState<State>({
     todoList: [],
     isTyping: false,
@@ -52,10 +58,12 @@ export const useTodo = (): UseTodoReturnType => {
   const registerTodo = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== "Enter" || !state.value) return;
-      const newTodo = {
+
+      const newTodo: Todo = {
         id: state.todoList[state.todoList.length - 1]?.id + 1 || 1,
         todo: state.value,
         completed: false,
+        whenTodo,
       };
       setState({ ...state, todoList: [...state.todoList, newTodo], value: "" });
     },
