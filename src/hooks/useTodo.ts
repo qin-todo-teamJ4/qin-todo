@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useState } from "react";
+import {
+  atom,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 
 export type UseTodoReturnType = {
-  state: State;
+  todoListState: Todo[];
+  inputState: InputState;
   addTask: VoidFunction;
   cancelInput: VoidFunction;
   inputTodo: (value: string) => void;
@@ -16,59 +24,74 @@ type Todo = {
   whenTodo: WhenTodo;
 };
 type WhenTodo = "今日する" | "明日する" | "今度する";
-type State = {
-  todoList: Todo[];
+
+type InputState = {
   isTyping: boolean;
   value: string;
 };
+
 export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
-  const [state, setState] = useState<State>({
-    todoList: [],
+  const todoState = atom<Todo[]>({
+    key: "todoState",
+    default: [],
+  });
+  const [todoListState, setTodoListState] = useRecoilState(todoState);
+  const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
     value: "",
   });
 
   const addTask = useCallback(() => {
-    setState({ ...state, isTyping: true });
-  }, [state]);
+    setInputState({ ...inputState, isTyping: true });
+  }, [inputState]);
 
   const cancelInput = useCallback(() => {
-    setState({ ...state, isTyping: false });
-  }, [state]);
+    setInputState({ ...inputState, isTyping: false });
+  }, [inputState]);
 
   const inputTodo = useCallback(
     (value: string) => {
-      setState({ ...state, value });
+      setInputState({ ...inputState, value });
     },
-    [state]
+    [inputState]
   );
 
   const checkTodo = useCallback(
     (id: number) => {
-      state.todoList.forEach((todo) => {
+      const newData = todoListState.map((todo) => {
         if (todo.id === id) {
-          todo.completed = !todo.completed;
+          todo.completed = true;
         }
+        return todo;
       });
-      setState({ ...state });
+      setTodoListState(newData);
     },
-    [state]
+    [todoListState]
   );
 
   const registerTodo = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== "Enter" || !state.value) return;
+      if (event.key !== "Enter" || !inputState.value) return;
 
       const newTodo: Todo = {
-        id: state.todoList[state.todoList.length - 1]?.id + 1 || 1,
-        todo: state.value,
+        id: todoListState[todoListState.length - 1]?.id + 1 || 1,
+        todo: inputState.value,
         completed: false,
-        whenTodo,
+        whenTodo: "今度する",
       };
-      setState({ ...state, todoList: [...state.todoList, newTodo], value: "" });
+      setTodoListState([...todoListState, newTodo]);
+      setInputState({ ...inputState, value: "" });
     },
-    [state]
+    [inputState, todoListState]
   );
 
-  return { state, addTask, cancelInput, inputTodo, checkTodo, registerTodo };
+  return {
+    todoListState,
+    inputState,
+    addTask,
+    cancelInput,
+    inputTodo,
+    checkTodo,
+    registerTodo,
+  };
 };
