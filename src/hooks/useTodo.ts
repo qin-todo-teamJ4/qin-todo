@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useState } from "react";
-import {
-  atom,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import type { SetterOrUpdater } from "recoil";
+import { atom, useRecoilState } from "recoil";
 
 export type UseTodoReturnType = {
   todoListState: Todo[];
@@ -15,6 +11,7 @@ export type UseTodoReturnType = {
   inputTodo: (value: string) => void;
   checkTodo: (id: number) => void;
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  setTodoListState: SetterOrUpdater<Todo[]>;
 };
 
 type Todo = {
@@ -93,5 +90,6 @@ export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
     inputTodo,
     checkTodo,
     registerTodo,
+    setTodoListState,
   };
 };
