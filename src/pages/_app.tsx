@@ -5,6 +5,10 @@ import Head from "next/head";
 
 import { Layout } from "../layouts";
 
+import("../mocks").then(({ setupMocks }) => {
+  setupMocks();
+});
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
