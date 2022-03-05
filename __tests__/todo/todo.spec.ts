@@ -23,7 +23,7 @@ describe("useTodoのテスト", () => {
   it("stateの初期値がvalue:'',isTyping:false,todoList:[]になっていること", () => {
     expect(result.current.inputState.value).toBe("");
     expect(result.current.inputState.isTyping).toBe(false);
-    expect(result.current.todoListState.length).toBe(0);
+    expect(result.current.todoState.length).toBe(0);
   });
 
   it("addTask関数でisTypingがtrueになること", () => {
@@ -47,31 +47,6 @@ describe("useTodoのテスト", () => {
     });
     expect(result.current.inputState.value).toBe("test");
   });
-
-  it("checkTodo関数でstate.completedが更新されること", () => {
-    const mockTodo: typeof result.current.todoListState = [];
-    const updateId = 5;
-    for (let i = 0; i < 10; i++) {
-      mockTodo.push({
-        id: i + 1,
-        todo: `todo${i + 1}`,
-        completed: false,
-        whenTodo: "今日する",
-      });
-    }
-    result.current.todoListState = mockTodo;
-    expect(result.current.todoListState.length).toBe(10);
-    act(() => {
-      result.current.checkTodo(updateId);
-    });
-    result.current.todoListState.forEach((todo) => {
-      if (todo.id === updateId) {
-        expect(todo.completed).toBeTruthy();
-      } else {
-        expect(todo.completed).toBeFalsy();
-      }
-    });
-  });
 });
 
 describe("registerTodo関数のテスト", () => {
@@ -86,7 +61,7 @@ describe("registerTodo関数のテスト", () => {
     act(() => {
       result.current.registerTodo(otherKeyPressEvent);
     });
-    expect(result.current.todoListState.length).toBe(0);
+    expect(result.current.todoState.length).toBe(0);
     expect(result.current.inputState.value).toBe("");
   });
 
@@ -94,7 +69,7 @@ describe("registerTodo関数のテスト", () => {
     act(() => {
       result.current.registerTodo(enterKeyPressEvent);
     });
-    expect(result.current.todoListState.length).toBe(0);
+    expect(result.current.todoState.length).toBe(0);
     expect(result.current.inputState.value).toBe("");
   });
 
@@ -103,7 +78,7 @@ describe("registerTodo関数のテスト", () => {
     act(() => {
       result.current.registerTodo(otherKeyPressEvent);
     });
-    expect(result.current.todoListState.length).toBe(0);
+    expect(result.current.todoState.length).toBe(0);
     expect(result.current.inputState.value).toBe("test");
   });
 
@@ -112,34 +87,35 @@ describe("registerTodo関数のテスト", () => {
     act(() => {
       result.current.registerTodo(enterKeyPressEvent);
     });
-    expect(result.current.todoListState.length).toBe(1);
-    expect(result.current.todoListState[0].id).toBe(1);
-    expect(result.current.todoListState[0].todo).toBe("test");
-    expect(result.current.todoListState[0].completed).toBeFalsy();
+    expect(result.current.todoState.length).toBe(1);
+    expect(result.current.todoState[0].id).toBe(1);
+    expect(result.current.todoState[0].todo).toBe("test");
+    expect(result.current.todoState[0].completed).toBeFalsy();
     expect(result.current.inputState.value).toBe("");
   });
 
   it("todoListに10件のデータがある場合id:11,todo:(state.value),completed:falseのデータが追加されること", () => {
     result.current.inputState.value = "todo11";
-    const mockTodo: typeof result.current.todoListState = [];
+    const mockTodo: typeof result.current.todoState = [];
     for (let i = 0; i < 10; i++) {
       mockTodo.push({
         id: i + 1,
         todo: `todo${i + 1}`,
         completed: false,
         whenTodo: "今日する",
+        createdAt: new Date(),
       });
     }
-    result.current.setTodoListState(mockTodo);
+    result.current.setTodoState(mockTodo);
 
     act(() => {
       result.current.registerTodo(enterKeyPressEvent);
     });
 
-    expect(result.current.todoListState.length).toBe(11);
-    expect(result.current.todoListState[10].id).toBe(11);
-    expect(result.current.todoListState[10].todo).toBe("todo11");
-    expect(result.current.todoListState[10].completed).toBeFalsy();
+    expect(result.current.todoState.length).toBe(11);
+    expect(result.current.todoState[10].id).toBe(11);
+    expect(result.current.todoState[10].todo).toBe("todo11");
+    expect(result.current.todoState[10].completed).toBeFalsy();
     expect(result.current.inputState.value).toBe("");
   });
 });
