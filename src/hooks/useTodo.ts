@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useState } from "react";
 import type { SetterOrUpdater } from "recoil";
 import { atom, useRecoilState } from "recoil";
 
 export type UseTodoReturnType = {
-  todoListState: Todo[];
+  todoState: Todo[];
   inputState: InputState;
+  showingTodoList: Todo[];
   addTask: VoidFunction;
   cancelInput: VoidFunction;
   inputTodo: (value: string) => void;
   checkTodo: (id: number) => void;
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  setTodoListState: SetterOrUpdater<Todo[]>;
+  setTodoState: SetterOrUpdater<Todo[]>;
 };
 
 type Todo = {
@@ -19,6 +19,7 @@ type Todo = {
   todo: string;
   completed: boolean;
   whenTodo: WhenTodo;
+  createdAt: Date;
 };
 type WhenTodo = "今日する" | "明日する" | "今度する";
 
@@ -27,15 +28,19 @@ type InputState = {
   value: string;
 };
 
+const todoAtom = atom<Todo[]>({
+  key: "todoState",
+  default: [],
+});
 export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
-  const todoState = atom<Todo[]>({
-    key: "todoState",
-    default: [],
-  });
-  const [todoListState, setTodoListState] = useRecoilState(todoState);
+  const [todoState, setTodoState] = useRecoilState(todoAtom);
   const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
     value: "",
+  });
+
+  const showingTodoList = todoState.filter((todoList) => {
+    return todoList.whenTodo === whenTodo;
   });
 
   const addTask = useCallback(() => {
@@ -55,15 +60,18 @@ export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
 
   const checkTodo = useCallback(
     (id: number) => {
-      const newData = todoListState.map((todo) => {
-        if (todo.id === id) {
-          todo.completed = true;
-        }
-        return todo;
+      const index = todoState.findIndex((todo) => {
+        return todo.id === id;
       });
-      setTodoListState(newData);
+      const newData: Todo[] = [
+        ...todoState.slice(0, index),
+        { ...todoState[index], completed: !todoState[index].completed },
+        ...todoState.slice(index + 1),
+      ];
+
+      setTodoState(newData);
     },
-    [todoListState]
+    [todoState]
   );
 
   const registerTodo = useCallback(
@@ -71,25 +79,27 @@ export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
       if (event.key !== "Enter" || !inputState.value) return;
 
       const newTodo: Todo = {
-        id: todoListState[todoListState.length - 1]?.id + 1 || 1,
+        id: todoState[todoState.length - 1]?.id + 1 || 1,
         todo: inputState.value,
         completed: false,
-        whenTodo: "今度する",
+        whenTodo,
+        createdAt: new Date(),
       };
-      setTodoListState([...todoListState, newTodo]);
+      setTodoState([...todoState, newTodo]);
       setInputState({ ...inputState, value: "" });
     },
-    [inputState, todoListState]
+    [inputState, todoState]
   );
 
   return {
-    todoListState,
+    todoState,
     inputState,
+    showingTodoList,
     addTask,
     cancelInput,
     inputTodo,
     checkTodo,
     registerTodo,
-    setTodoListState,
+    setTodoState,
   };
 };
