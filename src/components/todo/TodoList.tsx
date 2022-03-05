@@ -16,14 +16,14 @@ type Props = {
 export const TodoList: VFC<Props> = (props) => {
   const { whenTodo, mainColor } = props;
   const {
-    todoListState,
     inputState,
+    showingTodoList,
     registerTodo,
     inputTodo,
     cancelInput,
     checkTodo,
     addTask,
-  } = useTodo(props.whenTodo);
+  } = useTodo(whenTodo);
 
   return (
     <div className="ml-5 w-64">
@@ -39,7 +39,7 @@ export const TodoList: VFC<Props> = (props) => {
         <div className="h-10 invisible">invisible</div>
       )}
       <ul>
-        {todoListState?.map((todo) => {
+        {showingTodoList?.map((todo) => {
           return (
             <TodoContent key={todo.id} todo={todo} checkTodo={checkTodo} />
           );
