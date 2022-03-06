@@ -1,4 +1,6 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useUser } from "src/lib/auth";
 
 import { Header } from "../components/Layouts/Header";
 import { TodoList } from "../components/todo/TodoList";
@@ -14,6 +16,9 @@ const Home: NextPage = () => {
     // eslint-disable-next-line no-console
     console.log(todos);
   };
+  const router = useRouter();
+  const user = useUser();
+  if (user === null) router.push("/auth/signin");
 
   return (
     <>
