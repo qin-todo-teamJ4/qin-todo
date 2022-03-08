@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { VFC } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 
@@ -6,7 +5,7 @@ export const Header: VFC = () => {
   return (
     <header className="h-20 flex justify-between">
       <div className="pt-6 xl:ml-48 md:ml-36 sm:ml-24 ml-12">
-        <Image src="/logo.svg" width={112.48} height={24.14} alt="Qin Todo" />
+        <img src="/logo.svg" alt="Qin Todo" width={112.48} height={24.14} />
       </div>
       <div className="pt-5 xl:mr-48 md:mr-36 sm:mr-24 mr-12">
         <AiOutlineUser className="text-4xl  text-gray-300" />
