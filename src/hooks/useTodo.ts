@@ -2,6 +2,8 @@ import { useCallback, useState } from "react";
 import type { SetterOrUpdater } from "recoil";
 import { atom, useRecoilState } from "recoil";
 
+import type { Todo, WhenTodo } from "../types/todo";
+
 export type UseTodoReturnType = {
   todoState: Todo[];
   inputState: InputState;
@@ -13,15 +15,6 @@ export type UseTodoReturnType = {
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   setTodoState: SetterOrUpdater<Todo[]>;
 };
-
-type Todo = {
-  id: number;
-  todo: string;
-  completed: boolean;
-  whenTodo: WhenTodo;
-  createdAt: Date;
-};
-type WhenTodo = "今日する" | "明日する" | "今度する";
 
 type InputState = {
   isTyping: boolean;
