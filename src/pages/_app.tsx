@@ -9,6 +9,9 @@ import { useAuth } from "src/lib/auth";
 
 import { Layout } from "../layouts";
 
+import("../mocks").then(({ setupMocks }) => {
+  setupMocks();
+});
 const Auth: VFC<{ children: JSX.Element }> = (props) => {
   const isLoading = useAuth();
   return isLoading ? <Loader /> : props.children;
