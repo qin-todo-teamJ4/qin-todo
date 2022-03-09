@@ -4,8 +4,9 @@ import type { VFC } from "react";
 type Props = {
   user: User | null;
   size: number;
-  className: string;
+  className?: string;
 };
+
 export const Avatar: VFC<Props> = (props) => {
   return (
     <img
