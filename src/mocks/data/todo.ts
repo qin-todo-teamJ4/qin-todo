@@ -1,0 +1,88 @@
+import type { Todo } from "../../types/todo";
+
+export const todoList: Todo[] = [
+  {
+    id: 1,
+    todo: "今日する未完了(3/12)",
+    completed: false,
+    whenTodo: "今日する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 2,
+    todo: "今日する完了(3/12)",
+    completed: true,
+    whenTodo: "今日する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 3,
+    todo: "今日する未完了(3/11)",
+    completed: false,
+    whenTodo: "今日する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+  {
+    id: 4,
+    todo: "今日する完了(3/11)",
+    completed: true,
+    whenTodo: "今日する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+  {
+    id: 5,
+    todo: "明日する未完了(3/12)",
+    completed: false,
+    whenTodo: "明日する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 6,
+    todo: "明日する完了(3/12)",
+    completed: true,
+    whenTodo: "明日する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 7,
+    todo: "明日する未完了(3/11)",
+    completed: false,
+    whenTodo: "明日する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+  {
+    id: 8,
+    todo: "明日する完了(3/11)",
+    completed: true,
+    whenTodo: "明日する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+  {
+    id: 9,
+    todo: "今度する未完了(3/12)",
+    completed: false,
+    whenTodo: "今度する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 10,
+    todo: "今度する完了(3/12)",
+    completed: true,
+    whenTodo: "今度する",
+    createdAt: new Date("2022-03-12T21:54:21.460Z"),
+  },
+  {
+    id: 11,
+    todo: "今度する未完了(3/11)",
+    completed: false,
+    whenTodo: "今度する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+  {
+    id: 12,
+    todo: "今度する完了(3/11)",
+    completed: true,
+    whenTodo: "今度する",
+    createdAt: new Date("2022-03-11T21:54:21.460Z"),
+  },
+];

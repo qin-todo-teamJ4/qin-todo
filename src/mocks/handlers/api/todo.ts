@@ -3,43 +3,30 @@ import { rest } from "msw";
 
 import type { Todo, TodoBody } from "../../../types/todo";
 import { API } from "../../../utils/path";
+import { todoList } from "../../data/todo";
 
-const todoList: Todo[] = [
-  {
-    id: 1,
-    todo: "todo1",
-    completed: false,
-    whenTodo: "今日する",
-    createdAt: new Date("2022-03-07T21:54:21.460Z"),
-  },
-  {
-    id: 2,
-    todo: "todo2",
-    completed: false,
-    whenTodo: "明日する",
-    createdAt: new Date("2022-03-08T21:54:21.460Z"),
-  },
-  {
-    id: 3,
-    todo: "todo3",
-    completed: false,
-    whenTodo: "今度する",
-    createdAt: new Date("2022-03-08T21:54:21.460Z"),
-  },
-  {
-    id: 4,
-    todo: "todo4",
-    completed: false,
-    whenTodo: "今度する",
-    createdAt: new Date("2022-03-08T21:54:21.460Z"),
-  },
-];
+/**
+ * 作成日が当日以前かつcompletedがtrueのTodoは除外
+ * whenTodoが「明日する」でcreatedAtが昨日以前のTodoはwhenTodoを「今日する」にする
+ */
+const sortingTodo = (): Todo[] => {
+  return todoList.filter((todo) => {
+    if (todo.createdAt < new Date() && todo.completed) {
+      return;
+    }
+    if (todo.whenTodo === "明日する" && todo.createdAt <= new Date()) {
+      todo.whenTodo = "今日する";
+      return todo;
+    }
+    return todo;
+  });
+};
 
 export const todoHandlers = [
   rest.get<DefaultRequestBody, PathParams, Todo[]>(
     API.todo,
     (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(todoList));
+      return res(ctx.status(200), ctx.json(sortingTodo()));
     }
   ),
   rest.post<TodoBody>(API.todo, (req, res, ctx) => {
@@ -49,6 +36,6 @@ export const todoHandlers = [
       createdAt: new Date(),
     };
     todoList.push(newTodo);
-    return res(ctx.status(200), ctx.json(todoList));
+    return res(ctx.status(200), ctx.json(sortingTodo()));
   }),
 ];
