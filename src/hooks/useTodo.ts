@@ -3,7 +3,8 @@ import type { SetterOrUpdater } from "recoil";
 import { atom, useRecoilState } from "recoil";
 
 import { useUser } from "../lib/auth";
-import type { Todo, TodoBody, WhenTodo } from "../types/todo";
+import type { Todo, WhenTodo } from "../types/todo";
+import { TodoRequestBody } from "../types/todo";
 import { API } from "../utils/path";
 import { useRequest } from "./useRequest";
 
@@ -79,15 +80,16 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
     async (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== "Enter" || !inputState.value || !whenTodo || !userId)
         return;
-
-      const newTodo: TodoBody = {
+      const newTodo = new TodoRequestBody(
         userId,
-        todo: inputState.value,
-        completed: false,
-        whenTodo,
-      };
-
-      const response = await postRequest<TodoBody, Todo[]>(API.todo, newTodo);
+        inputState.value,
+        false,
+        whenTodo
+      );
+      const response = await postRequest<TodoRequestBody, Todo[]>(
+        API.todo,
+        newTodo
+      );
       if (response !== void 0) {
         setTodoState(response);
       }

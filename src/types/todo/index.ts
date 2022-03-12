@@ -9,4 +9,11 @@ export type Todo = {
   createdAt: Date;
 };
 
-export type TodoBody = Omit<Todo, "id" | "createdAt">;
+export class TodoRequestBody {
+  constructor(
+    public userId: string,
+    public todo: string,
+    public completed: boolean,
+    public whenTodo: WhenTodo
+  ) {}
+}

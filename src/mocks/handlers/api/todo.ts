@@ -1,7 +1,7 @@
 import type { DefaultRequestBody, PathParams } from "msw";
 import { rest } from "msw";
 
-import type { Todo, TodoBody } from "../../../types/todo";
+import type { Todo, TodoRequestBody } from "../../../types/todo";
 import { API } from "../../../utils/path";
 import { todoList } from "../../data/todo";
 
@@ -37,7 +37,7 @@ export const todoHandlers = [
     }
   ),
 
-  rest.post<TodoBody>(API.todo, (req, res, ctx) => {
+  rest.post<TodoRequestBody>(API.todo, (req, res, ctx) => {
     const userId = req.headers.get("userid");
     if (!userId) return res(ctx.status(403));
     const newTodo: Todo = {
