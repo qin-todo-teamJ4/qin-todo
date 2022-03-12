@@ -7,3 +7,5 @@ export type Todo = {
   whenTodo: WhenTodo;
   createdAt: Date;
 };
+
+export type TodoBody = Pick<Todo, "todo" | "completed" | "whenTodo">;
