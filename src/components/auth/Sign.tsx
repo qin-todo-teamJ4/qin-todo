@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
 import type { VFC } from "react";
 import { Button } from "src/components/button";
@@ -17,7 +16,7 @@ export const Sign: VFC<SignProps> = (props) => {
     <div className="grid place-items-center w-screen h-screen bg-gray-200 dark:bg-gray-700">
       <div className="p-4">
         <div className="flex justify-center">
-          <Image src="/logo.svg" width={192} height={36.6} alt="Qin Todo" />
+          <img src="/logo.svg" alt="Qin Todo" width={192} height={36.6} />
         </div>
         <div className="mt-20 space-y-5">
           <Button
