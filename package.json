@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "firebase deploy --only hosting",
     "lint": "next lint",
+    "export": "next export",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "test": "vitest --run"
@@ -18,12 +20,16 @@
     ]
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
+    "@heroicons/react": "^1.0.6",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.1",
     "@testing-library/react-hooks": "^7.0.2",
     "@vitejs/plugin-react": "^1.2.0",
     "clsx": "^1.1.1",
+    "fetch": "^1.1.0",
     "firebase": "^9.6.7",
+    "firebase-tools": "^10.2.2",
     "next": "12.1.0",
     "next-auth": "^4.2.1",
     "react": "17.0.2",
@@ -49,6 +55,7 @@
     "husky": "^7.0.0",
     "jest-extended": "^2.0.0",
     "lint-staged": "^12.3.4",
+    "msw": "^0.38.1",
     "postcss": "^8.4.6",
     "prettier": "^2.5.1",
     "tailwindcss": "^3.0.23",
@@ -56,6 +63,10 @@
     "vitest": "^0.5.3"
   },
   "eslintIgnore": [
-    "/.eslintrc.js"
-  ]
+    "/.eslintrc.js",
+    "/out"
+  ],
+  "msw": {
+    "workerDirectory": "public"
+  }
 }
