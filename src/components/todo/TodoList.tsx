@@ -24,6 +24,7 @@ export const TodoList: VFC<Props> = (props) => {
     checkTodo,
     addTask,
     deleteTodo,
+    copyTodo,
   } = useTodo(whenTodo);
 
   return (
@@ -47,6 +48,7 @@ export const TodoList: VFC<Props> = (props) => {
               todo={todo}
               checkTodo={checkTodo}
               deleteTodo={deleteTodo}
+              copyTodo={copyTodo}
             />
           );
         })}

@@ -8,10 +8,11 @@ type Props = {
   todo: Todo;
   checkTodo: (id: number) => void;
   deleteTodo: (id: number) => void;
+  copyTodo: (id: number) => void;
 };
 
 export const TodoContent: VFC<Props> = (props) => {
-  const { todo, checkTodo, deleteTodo } = props;
+  const { todo, checkTodo, deleteTodo, copyTodo } = props;
   return (
     <li className="flex text-gray-400 py-1 text-lg">
       <input
@@ -27,7 +28,12 @@ export const TodoContent: VFC<Props> = (props) => {
       >
         {todo.todo}
       </p>
-      <HiOutlineDuplicate className="text-2xl ml-12" />
+      <HiOutlineDuplicate
+        onClick={() => {
+          copyTodo(todo.id);
+        }}
+        className="text-2xl ml-12"
+      />
       <FiTrash2
         onClick={() => {
           deleteTodo(todo.id);

@@ -19,6 +19,7 @@ export type UseTodoReturnType = {
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   setTodoState: SetterOrUpdater<Todo[]>;
   deleteTodo: (id: number) => void;
+  copyTodo: (id: number) => void;
 };
 
 type InputState = {
@@ -98,6 +99,31 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
     [inputState, todoState]
   );
 
+  const copyTodo = useCallback(
+    async (id: number) => {
+      if (!whenTodo || !userId) return;
+
+      const copyTarget = todoState.find((todo) => {
+        return todo.id === id;
+      });
+      if (!copyTarget) return;
+      const newTodo = new TodoRequestBody(
+        userId,
+        copyTarget.todo,
+        copyTarget.completed,
+        whenTodo
+      );
+      const response = await postRequest<TodoRequestBody, Todo[]>(
+        API.todo,
+        newTodo
+      );
+      if (response !== void 0) {
+        setTodoState(response);
+      }
+      setInputState({ ...inputState, value: "" });
+    },
+    [todoState]
+  );
   const deleteTodo = useCallback(
     async (id: number) => {
       const response = await deleteRequest<Todo[]>(`${API.todo}/${id}`);
@@ -110,6 +136,7 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
 
   return {
     todoState,
+    copyTodo,
     inputState,
     showingTodoList,
     addTask,
