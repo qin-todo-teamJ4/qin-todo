@@ -5,22 +5,32 @@ import { AddTodoButton } from "../common/AddTodoButton";
 import { TodoContent } from "./TodoContent";
 import { TodoForm } from "./TodoForm";
 
+type WhenTodo = "今日する" | "明日する" | "今度する";
+type MainColor = "text-rose-500" | "text-orange-500" | "text-yellow-400";
+
 type Props = {
-  title: string;
-  mainColor: string;
+  whenTodo: WhenTodo;
+  mainColor: MainColor;
 };
 
 export const TodoList: VFC<Props> = (props) => {
-  const { title, mainColor } = props;
-  const { state, registerTodo, inputTodo, cancelInput, checkTodo, addTask } =
-    useTodo();
+  const { whenTodo, mainColor } = props;
+  const {
+    inputState,
+    showingTodoList,
+    registerTodo,
+    inputTodo,
+    cancelInput,
+    checkTodo,
+    addTask,
+  } = useTodo(whenTodo);
 
   return (
     <div className="ml-5 w-64">
-      <h2 className={`${mainColor} mb-2 text-2xl font-semibold`}>{title}</h2>
-      {state.isTyping ? (
+      <h2 className={`${mainColor} mb-2 text-2xl font-semibold`}>{whenTodo}</h2>
+      {inputState.isTyping ? (
         <TodoForm
-          value={state.value}
+          value={inputState.value}
           registerTodo={registerTodo}
           inputTodo={inputTodo}
           cancelInput={cancelInput}
@@ -29,7 +39,7 @@ export const TodoList: VFC<Props> = (props) => {
         <div className="h-10 invisible">invisible</div>
       )}
       <ul>
-        {state.todoList.map((todo) => {
+        {showingTodoList?.map((todo) => {
           return (
             <TodoContent key={todo.id} todo={todo} checkTodo={checkTodo} />
           );
