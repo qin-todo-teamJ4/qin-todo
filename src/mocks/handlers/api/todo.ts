@@ -49,4 +49,16 @@ export const todoHandlers = [
     todoList.push(newTodo);
     return res(ctx.status(200), ctx.json(sortingTodo(userId)));
   }),
+
+  rest.delete(`${API.todo}/:id`, (req, res, ctx) => {
+    const userId = req.headers.get("userid");
+    if (!userId) return res(ctx.status(403));
+    const deleteTodoId = Number(req.params.id);
+    const deleteTodoIndex = todoList.findIndex((todo) => {
+      return todo.id === deleteTodoId;
+    });
+
+    todoList.splice(deleteTodoIndex, 1);
+    return res(ctx.status(200), ctx.json(sortingTodo(userId)));
+  }),
 ];
