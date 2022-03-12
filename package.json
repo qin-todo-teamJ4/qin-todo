@@ -11,7 +11,8 @@
     "export": "next export",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "test-w": "vitest --watch"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
