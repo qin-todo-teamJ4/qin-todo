@@ -17,6 +17,7 @@ export type UseTodoReturnType = {
   checkTodo: (id: number) => void;
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   setTodoState: SetterOrUpdater<Todo[]>;
+  deleteTodo: (id: number) => void;
 };
 
 type InputState = {
@@ -32,7 +33,7 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
   const user = useUser();
   const userId = user?.uid || "";
 
-  const { postRequest } = useRequest(userId);
+  const { postRequest, deleteRequest } = useRequest(userId);
   const [todoState, setTodoState] = useRecoilState(todoAtom);
   const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
@@ -95,6 +96,16 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
     [inputState, todoState]
   );
 
+  const deleteTodo = useCallback(
+    async (id: number) => {
+      const response = await deleteRequest<Todo[]>(`${API.todo}/${id}`);
+      if (response !== void 0) {
+        setTodoState(response);
+      }
+    },
+    [todoState]
+  );
+
   return {
     todoState,
     inputState,
@@ -105,5 +116,6 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
     checkTodo,
     registerTodo,
     setTodoState,
+    deleteTodo,
   };
 };

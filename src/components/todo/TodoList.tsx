@@ -23,6 +23,7 @@ export const TodoList: VFC<Props> = (props) => {
     cancelInput,
     checkTodo,
     addTask,
+    deleteTodo,
   } = useTodo(whenTodo);
 
   return (
@@ -41,7 +42,12 @@ export const TodoList: VFC<Props> = (props) => {
       <ul>
         {showingTodoList?.map((todo) => {
           return (
-            <TodoContent key={todo.id} todo={todo} checkTodo={checkTodo} />
+            <TodoContent
+              key={todo.id}
+              todo={todo}
+              checkTodo={checkTodo}
+              deleteTodo={deleteTodo}
+            />
           );
         })}
       </ul>

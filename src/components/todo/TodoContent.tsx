@@ -7,10 +7,11 @@ import type { Todo } from "../../types/todo";
 type Props = {
   todo: Todo;
   checkTodo: (id: number) => void;
+  deleteTodo: (id: number) => void;
 };
 
 export const TodoContent: VFC<Props> = (props) => {
-  const { todo, checkTodo } = props;
+  const { todo, checkTodo, deleteTodo } = props;
   return (
     <li className="flex text-gray-400 py-1 text-lg">
       <input
@@ -27,7 +28,12 @@ export const TodoContent: VFC<Props> = (props) => {
         {todo.todo}
       </p>
       <HiOutlineDuplicate className="text-2xl ml-12" />
-      <FiTrash2 className="text-2xl ml-2" />
+      <FiTrash2
+        onClick={() => {
+          deleteTodo(todo.id);
+        }}
+        className="text-2xl ml-2"
+      />
     </li>
   );
 };
