@@ -16,13 +16,13 @@ const Home: NextPage = () => {
   const userId = user?.uid || "";
 
   const { getRequest } = useRequest(userId);
-  const { setTodoState } = useTodo();
+  const { setTodoList } = useTodo();
   if (user === null) router.push("/auth/signin");
 
   const fetchData = async () => {
     const response = await getRequest<Todo[]>(API.todo);
     if (response !== void 0) {
-      setTodoState(response);
+      setTodoList(response);
     }
   };
 

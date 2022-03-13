@@ -9,7 +9,7 @@ import { API } from "../utils/path";
 import { useRequest } from "./useRequest";
 
 export type UseTodoReturnType = {
-  todoState: Todo[];
+  todoList: Todo[];
   inputState: InputState;
   showingTodoList: Todo[];
   addTask: VoidFunction;
@@ -17,9 +17,11 @@ export type UseTodoReturnType = {
   inputTodo: (value: string) => void;
   checkTodo: (id: number) => void;
   registerTodo: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  setTodoState: SetterOrUpdater<Todo[]>;
+  setTodoList: SetterOrUpdater<Todo[]>;
   deleteTodo: (id: number) => void;
   copyTodo: (id: number) => void;
+  updateTodo: (todo: Todo) => void;
+  updateTodoList: (todoList: Todo[], index: number, value: string) => Todo[];
 };
 
 type InputState = {
@@ -27,7 +29,7 @@ type InputState = {
   value: string;
 };
 
-const todoAtom = atom<Todo[]>({
+export const todoState = atom<Todo[]>({
   key: "todoState",
   default: [],
 });
@@ -35,16 +37,30 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
   const user = useUser();
   const userId = user?.uid || "";
 
-  const { postRequest, deleteRequest } = useRequest(userId);
-  const [todoState, setTodoState] = useRecoilState(todoAtom);
+  const { postRequest, deleteRequest, putRequest } = useRequest(userId);
+  const [todoList, setTodoList] = useRecoilState(todoState);
   const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
     value: "",
   });
 
-  const showingTodoList = todoState.filter((todoList) => {
+  const showingTodoList = todoList.filter((todoList) => {
     return todoList.whenTodo === whenTodo;
   });
+
+  const updateTodoList = (
+    todoList: Todo[],
+    index: number,
+    value: string | boolean
+  ): Todo[] => {
+    const target =
+      typeof value === "string" ? { todo: value } : { completed: value };
+    return [
+      ...todoList.slice(0, index),
+      { ...todoList[index], ...target },
+      ...todoList.slice(index + 1),
+    ];
+  };
 
   const addTask = useCallback(() => {
     setInputState({ ...inputState, isTyping: true });
@@ -63,18 +79,19 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
 
   const checkTodo = useCallback(
     (id: number) => {
-      const index = todoState.findIndex((todo) => {
+      const index = todoList.findIndex((todo) => {
         return todo.id === id;
       });
-      const newData: Todo[] = [
-        ...todoState.slice(0, index),
-        { ...todoState[index], completed: !todoState[index].completed },
-        ...todoState.slice(index + 1),
-      ];
 
-      setTodoState(newData);
+      const newData = updateTodoList(
+        todoList,
+        index,
+        !todoList[index].completed
+      );
+
+      setTodoList(newData);
     },
-    [todoState]
+    [todoList]
   );
 
   const registerTodo = useCallback(
@@ -92,18 +109,18 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
         newTodo
       );
       if (response !== void 0) {
-        setTodoState(response);
+        setTodoList(response);
       }
       setInputState({ ...inputState, value: "" });
     },
-    [inputState, todoState]
+    [inputState, todoList]
   );
 
   const copyTodo = useCallback(
     async (id: number) => {
       if (!whenTodo || !userId) return;
 
-      const copyTarget = todoState.find((todo) => {
+      const copyTarget = todoList.find((todo) => {
         return todo.id === id;
       });
       if (!copyTarget) return;
@@ -118,24 +135,39 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
         newTodo
       );
       if (response !== void 0) {
-        setTodoState(response);
+        setTodoList(response);
       }
       setInputState({ ...inputState, value: "" });
     },
-    [todoState]
+    [todoList]
   );
   const deleteTodo = useCallback(
     async (id: number) => {
       const response = await deleteRequest<Todo[]>(`${API.todo}/${id}`);
       if (response !== void 0) {
-        setTodoState(response);
+        setTodoList(response);
       }
     },
-    [todoState]
+    [todoList]
+  );
+
+  const updateTodo = useCallback(
+    async (todo: Todo) => {
+      if (!whenTodo || !userId) return;
+      const newTodo = new TodoRequestBody(userId, todo.todo, false, whenTodo);
+      const response = await putRequest<TodoRequestBody, Todo[]>(
+        `${API.todo}/${todo.id}`,
+        newTodo
+      );
+      if (response !== void 0) {
+        setTodoList(response);
+      }
+    },
+    [todoList]
   );
 
   return {
-    todoState,
+    todoList,
     copyTodo,
     inputState,
     showingTodoList,
@@ -144,7 +176,9 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
     inputTodo,
     checkTodo,
     registerTodo,
-    setTodoState,
+    setTodoList,
     deleteTodo,
+    updateTodo,
+    updateTodoList,
   };
 };
