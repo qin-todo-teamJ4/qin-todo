@@ -12,7 +12,7 @@ type Props = {
 export const TodoContent: VFC<Props> = (props) => {
   const { todo, checkTodo } = props;
   return (
-    <li className="flex text-gray-400 py-1 text-lg">
+    <li className="group flex text-gray-400 py-1 text-lg cursor-pointer">
       <input
         type="checkbox"
         className="rounded-full focus:outline-none w-6 h-6 mr-3"
@@ -26,8 +26,10 @@ export const TodoContent: VFC<Props> = (props) => {
       >
         {todo.todo}
       </p>
-      <HiOutlineDuplicate className="text-2xl ml-12" />
-      <FiTrash2 className="text-2xl ml-2" />
+      <div className="hidden group-hover:flex">
+        <HiOutlineDuplicate className="text-2xl ml-12" />
+        <FiTrash2 className="text-2xl ml-2" />
+      </div>
     </li>
   );
 };
