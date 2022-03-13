@@ -50,15 +50,33 @@ export const todoHandlers = [
     return res(ctx.status(200), ctx.json(sortingTodo(userId)));
   }),
 
-  rest.delete(`${API.todo}/:id`, (req, res, ctx) => {
+  rest.put<TodoRequestBody>(`${API.todo}/:id`, (req, res, ctx) => {
     const userId = req.headers.get("userid");
     if (!userId) return res(ctx.status(403));
-    const deleteTodoId = Number(req.params.id);
-    const deleteTodoIndex = todoList.findIndex((todo) => {
-      return todo.id === deleteTodoId;
+    const updateTodoId = Number(req.params.id);
+    const updateTodoIndex = todoList.findIndex((todo) => {
+      return todo.id === updateTodoId;
     });
-
-    todoList.splice(deleteTodoIndex, 1);
+    const newTodo: Todo = {
+      ...todoList[updateTodoIndex],
+      ...req.body,
+    };
+    todoList[updateTodoIndex] = newTodo;
     return res(ctx.status(200), ctx.json(sortingTodo(userId)));
   }),
+
+  rest.delete<DefaultRequestBody, PathParams, Todo[]>(
+    `${API.todo}/:id`,
+    (req, res, ctx) => {
+      const userId = req.headers.get("userid");
+      if (!userId) return res(ctx.status(403));
+      const deleteTodoId = Number(req.params.id);
+      const deleteTodoIndex = todoList.findIndex((todo) => {
+        return todo.id === deleteTodoId;
+      });
+
+      todoList.splice(deleteTodoIndex, 1);
+      return res(ctx.status(200), ctx.json(sortingTodo(userId)));
+    }
+  ),
 ];
