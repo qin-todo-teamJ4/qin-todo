@@ -1,7 +1,7 @@
 import type { DefaultRequestBody, PathParams } from "msw";
 import { rest } from "msw";
 
-import type { Todo, TodoBody } from "../../../types/todo";
+import type { Todo, TodoRequestBody } from "../../../types/todo";
 import { API } from "../../../utils/path";
 import { todoList } from "../../data/todo";
 
@@ -37,7 +37,7 @@ export const todoHandlers = [
     }
   ),
 
-  rest.post<TodoBody>(API.todo, (req, res, ctx) => {
+  rest.post<TodoRequestBody>(API.todo, (req, res, ctx) => {
     const userId = req.headers.get("userid");
     if (!userId) return res(ctx.status(403));
     const newTodo: Todo = {
@@ -49,4 +49,34 @@ export const todoHandlers = [
     todoList.push(newTodo);
     return res(ctx.status(200), ctx.json(sortingTodo(userId)));
   }),
+
+  rest.put<TodoRequestBody>(`${API.todo}/:id`, (req, res, ctx) => {
+    const userId = req.headers.get("userid");
+    if (!userId) return res(ctx.status(403));
+    const updateTodoId = Number(req.params.id);
+    const updateTodoIndex = todoList.findIndex((todo) => {
+      return todo.id === updateTodoId;
+    });
+    const newTodo: Todo = {
+      ...todoList[updateTodoIndex],
+      ...req.body,
+    };
+    todoList[updateTodoIndex] = newTodo;
+    return res(ctx.status(200), ctx.json(sortingTodo(userId)));
+  }),
+
+  rest.delete<DefaultRequestBody, PathParams, Todo[]>(
+    `${API.todo}/:id`,
+    (req, res, ctx) => {
+      const userId = req.headers.get("userid");
+      if (!userId) return res(ctx.status(403));
+      const deleteTodoId = Number(req.params.id);
+      const deleteTodoIndex = todoList.findIndex((todo) => {
+        return todo.id === deleteTodoId;
+      });
+
+      todoList.splice(deleteTodoIndex, 1);
+      return res(ctx.status(200), ctx.json(sortingTodo(userId)));
+    }
+  ),
 ];

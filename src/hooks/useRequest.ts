@@ -22,6 +22,15 @@ export const useRequest = (userId: string) => {
     }
   };
 
+  const putRequest = async <T, U>(path: string, body: T): Promise<U | void> => {
+    try {
+      const { data } = await axios.put<U>(path, body, { headers: { userId } });
+      return data;
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+    }
+  };
+
   const deleteRequest = async <T>(path: string): Promise<T | void> => {
     try {
       const { data } = await axios.delete<T>(path, { headers: { userId } });
@@ -30,5 +39,6 @@ export const useRequest = (userId: string) => {
       if (error instanceof Error) alert(error.message);
     }
   };
-  return { getRequest, postRequest, deleteRequest };
+
+  return { getRequest, postRequest, deleteRequest, putRequest };
 };
