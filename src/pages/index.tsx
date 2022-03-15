@@ -13,7 +13,9 @@ import { API } from "../utils/path";
 const Home: NextPage = () => {
   const router = useRouter();
   const user = useUser();
-  const { getRequest } = useRequest();
+  const userId = user?.uid || "";
+
+  const { getRequest } = useRequest(userId);
   const { setTodoState } = useTodo();
   if (user === null) router.push("/auth/signin");
 

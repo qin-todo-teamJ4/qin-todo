@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import type { SetterOrUpdater } from "recoil";
 import { atom, useRecoilState } from "recoil";
 
+import { useUser } from "../lib/auth";
 import type { Todo, TodoBody, WhenTodo } from "../types/todo";
 import { API } from "../utils/path";
 import { useRequest } from "./useRequest";
@@ -28,7 +29,10 @@ const todoAtom = atom<Todo[]>({
   default: [],
 });
 export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
-  const { postRequest } = useRequest();
+  const user = useUser();
+  const userId = user?.uid || "";
+
+  const { postRequest } = useRequest(userId);
   const [todoState, setTodoState] = useRecoilState(todoAtom);
   const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
@@ -72,9 +76,11 @@ export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
 
   const registerTodo = useCallback(
     async (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== "Enter" || !inputState.value || !whenTodo) return;
+      if (event.key !== "Enter" || !inputState.value || !whenTodo || !userId)
+        return;
 
       const newTodo: TodoBody = {
+        userId,
         todo: inputState.value,
         completed: false,
         whenTodo,
