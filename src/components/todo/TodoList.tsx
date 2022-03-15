@@ -23,6 +23,8 @@ export const TodoList: VFC<Props> = (props) => {
     cancelInput,
     checkTodo,
     addTask,
+    deleteTodo,
+    copyTodo,
   } = useTodo(whenTodo);
 
   return (
@@ -39,9 +41,16 @@ export const TodoList: VFC<Props> = (props) => {
         <div className="h-10 invisible">invisible</div>
       )}
       <ul>
-        {showingTodoList?.map((todo) => {
+        {showingTodoList?.map((todo, index) => {
           return (
-            <TodoContent key={todo.id} todo={todo} checkTodo={checkTodo} />
+            <TodoContent
+              key={todo.id}
+              todo={todo}
+              checkTodo={checkTodo}
+              deleteTodo={deleteTodo}
+              copyTodo={copyTodo}
+              index={index}
+            />
           );
         })}
       </ul>

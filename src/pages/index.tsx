@@ -1,14 +1,34 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useUser } from "src/lib/auth";
 
 import { Header } from "../components/Layouts/Header";
 import { TodoList } from "../components/todo/TodoList";
+import { useRequest } from "../hooks/useRequest";
+import { useTodo } from "../hooks/useTodo";
+import type { Todo } from "../types/todo";
+import { API } from "../utils/path";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const user = useUser();
+  const userId = user?.uid || "";
+
+  const { getRequest } = useRequest(userId);
+  const { setTodoList } = useTodo();
   if (user === null) router.push("/auth/signin");
+
+  const fetchData = async () => {
+    const response = await getRequest<Todo[]>(API.todo);
+    if (response !== void 0) {
+      setTodoList(response);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
