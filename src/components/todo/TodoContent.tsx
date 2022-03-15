@@ -2,7 +2,7 @@ import type { VFC } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { HiOutlineDuplicate } from "react-icons/hi";
 
-type Todo = { id: number; todo: string; completed: boolean };
+import type { Todo } from "../../types/todo";
 
 type Props = {
   todo: Todo;

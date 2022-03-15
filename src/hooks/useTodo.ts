@@ -2,6 +2,10 @@ import { useCallback, useState } from "react";
 import type { SetterOrUpdater } from "recoil";
 import { atom, useRecoilState } from "recoil";
 
+import type { Todo, TodoBody, WhenTodo } from "../types/todo";
+import { API } from "../utils/path";
+import { useRequest } from "./useRequest";
+
 export type UseTodoReturnType = {
   todoState: Todo[];
   inputState: InputState;
@@ -14,15 +18,6 @@ export type UseTodoReturnType = {
   setTodoState: SetterOrUpdater<Todo[]>;
 };
 
-type Todo = {
-  id: number;
-  todo: string;
-  completed: boolean;
-  whenTodo: WhenTodo;
-  createdAt: Date;
-};
-type WhenTodo = "今日する" | "明日する" | "今度する";
-
 type InputState = {
   isTyping: boolean;
   value: string;
@@ -32,7 +27,8 @@ const todoAtom = atom<Todo[]>({
   key: "todoState",
   default: [],
 });
-export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
+export const useTodo = (whenTodo?: WhenTodo): UseTodoReturnType => {
+  const { postRequest } = useRequest();
   const [todoState, setTodoState] = useRecoilState(todoAtom);
   const [inputState, setInputState] = useState<InputState>({
     isTyping: false,
@@ -75,17 +71,19 @@ export const useTodo = (whenTodo: WhenTodo): UseTodoReturnType => {
   );
 
   const registerTodo = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key !== "Enter" || !inputState.value) return;
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== "Enter" || !inputState.value || !whenTodo) return;
 
-      const newTodo: Todo = {
-        id: todoState[todoState.length - 1]?.id + 1 || 1,
+      const newTodo: TodoBody = {
         todo: inputState.value,
         completed: false,
         whenTodo,
-        createdAt: new Date(),
       };
-      setTodoState([...todoState, newTodo]);
+
+      const response = await postRequest<TodoBody, Todo[]>(API.todo, newTodo);
+      if (response !== void 0) {
+        setTodoState(response);
+      }
       setInputState({ ...inputState, value: "" });
     },
     [inputState, todoState]
